@@ -39,7 +39,7 @@ columns = [
     'BASEWALLTIME', 'AMIFLAG_OLD', 'AMIFLAG', 'NUCLEUS', 'BASERAMCOUNT', 'LOCKEDTIME', 'STATECHANGETIME', 'THROTTLEDTIME',
     'ASSESSMENTTIME', 'CREATIONDATE', 'MODIFICATIONTIME', 'STARTTIME', 'ENDTIME', 'FROZENTIME',
     'TTCREQUESTED', 'TTCPREDICTED', 'TTCPREDICTIONDATE', 'RESCUETIME', 'REQUESTTYPE', 'GSHARE', 'USEJUMBO',
-    'RESOURCE_TYPE', 'DISKIO', 'DISKIOUNIT'
+    'RESOURCE_TYPE', 'DISKIO', 'DISKIOUNIT', 'ATTEMPTNR'
 ]
 
 escolumns = [
@@ -53,7 +53,7 @@ escolumns = [
     'basewalltime', 'amiflag_old', 'amiflag', 'nucleus', 'baseramcount', 'lockedtime', 'statechangetime', 'throttledtime',
     'assessmenttime', 'creationdate', 'modificationtime', 'starttime', 'endtime', 'frozentime',
     'ttcrequested',  'ttcpredicted', 'ttcpredictiondate', 'rescuetime', 'requesttype',  'gshare',  'usejumbo',
-    'resource_type', 'diskio',  'diskiounit'
+    'resource_type', 'diskio',  'diskiounit', 'attemptnr'
 ]
 
 sel = 'SELECT '

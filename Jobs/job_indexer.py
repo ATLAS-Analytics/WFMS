@@ -109,14 +109,21 @@ for row in cursor:
         doc['endtime'] = str(doc['endtime']).replace(' ', 'T')
     doc['cpuconsumptiontime'] = int(doc['cpuconsumptiontime'])
     if doc['statechangetime']:
-        doc['statechangetime'] = str(doc['statechangetime']).replace(' ', 'T')
+        doc['statechangetime'] = str(doc['statechange
+                                         time']).replace(' ', 'T')
 
     (doc['dbTime'], doc['dbData'], doc['workDirSize'], doc['jobmetrics']
      ) = conversions.splitJobmetrics(doc['jobmetrics'])
-    (doc['wall_time'], doc['cpu_eff'], doc['queue_time']) = conversions.deriveDurationAndCPUeff(
+    (doc['wall_time'], doc['cpu_eff'], doc['queue_time']6 = conversions.deriveDurationAndCPUeff(
         doc['creationtime'], doc['starttime'], doc['endtime'], doc['cpuconsumptiontime'])
-    (doc['timeGetJob'], doc['timeStageIn'], doc['timeExe'], doc['timeStageOut'],
-     doc['timeSetup']) = conversions.deriveTimes(doc['pilottiming'])
+    
+    dts = conversions.deriveTimes(doc['pilottiming'])
+    if len(dts) == 5:
+        (doc['timeGetJob'], doc['timeStageIn'], doc['timeExe'], doc['timeStageOut'], doc['timeSetup']) = dts
+    
+    if len(dts) == 6:
+        (doc['timeGetJob'], doc['timeStageIn'], doc['timeExe'], doc['timeStageOut'], doc['time_initial_setup'], doc['time_payload_setup'] ) = dts
+    
     doc["_index"] = "jobs_archive_write"
     doc["_id"] = doc['pandaid']
 

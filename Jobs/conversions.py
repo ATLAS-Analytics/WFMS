@@ -16,8 +16,10 @@ def deriveTimes(origString):
     times = origString.split('|')
     if len(times) == 4:
         times.append(0)
-    return (int(float(times[0])), int(float(times[1])), int(float(times[2])), int(float(times[3])), int(float(times[4])))
-
+    if len(times) == 5:
+        return (int(float(times[0])), int(float(times[1])), int(float(times[2])), int(float(times[3])), int(float(times[4])))
+    if len(times) == 6:
+        return (int(float(times[0])), int(float(times[1])), int(float(times[2])), int(float(times[3])), int(float(times[4])), int(float(times[5])))
 
 def splitJobmetrics(origString):
     if origString is None:

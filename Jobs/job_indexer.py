@@ -109,13 +109,10 @@ for row in cursor:
         doc['endtime'] = str(doc['endtime']).replace(' ', 'T')
     doc['cpuconsumptiontime'] = int(doc['cpuconsumptiontime'])
     if doc['statechangetime']:
-        doc['statechangetime'] = str(doc['statechange
-                                         time']).replace(' ', 'T')
+        doc['statechangetime'] = str(doc['statechangetime']).replace(' ', 'T')
 
-    (doc['dbTime'], doc['dbData'], doc['workDirSize'], doc['jobmetrics']
-     ) = conversions.splitJobmetrics(doc['jobmetrics'])
-    (doc['wall_time'], doc['cpu_eff'], doc['queue_time']6 = conversions.deriveDurationAndCPUeff(
-        doc['creationtime'], doc['starttime'], doc['endtime'], doc['cpuconsumptiontime'])
+    (doc['dbTime'], doc['dbData'], doc['workDirSize'], doc['jobmetrics']) = conversions.splitJobmetrics(doc['jobmetrics'])
+    (doc['wall_time'], doc['cpu_eff'], doc['queue_time']) = conversions.deriveDurationAndCPUeff( doc['creationtime'], doc['starttime'], doc['endtime'], doc['cpuconsumptiontime'])
     
     dts = conversions.deriveTimes(doc['pilottiming'])
     if len(dts) == 5:

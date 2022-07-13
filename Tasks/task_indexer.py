@@ -73,7 +73,7 @@ es = estools.get_es_connection()
 data = []
 count = 0
 for row in cursor:
-    doc = {"_type": "task_data"}
+    doc = {}
     for colName, colValue in zip(escolumns, row):
         # print(colName, colValue)
         doc[colName] = colValue

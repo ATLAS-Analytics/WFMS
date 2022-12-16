@@ -24,15 +24,10 @@ user = os.environ['JOB_ORACLE_USER']
 passw = os.environ['JOB_ORACLE_PASS']
 conn = os.environ['JOB_ORACLE_CONNECTION_STRING'].replace('jdbc:oracle:thin:@//', '')
 con = cx_Oracle.connect(user + '/' + passw + '@' + conn)
-# con = cx_Oracle.connect(user + '/' + passw + '@adcr_prodsys')
 print(con.version)
 
 
 cursor = con.cursor()
-not_stored_anymore = ['MAXCPUUNIT', 'MAXDISKUNIT',
-                      'IPCONNECTIVITY', 'MINRAMUNIT', 'PRODDBUPDATETIME', 'NINPUTFILES']
-print('omitting columns:', not_stored_anymore)
-
 
 columns = [
     'JOBS.PANDAID', 'JOBS.JOBDEFINITIONID', 'JOBS.SCHEDULERID', 'JOBS.PILOTID', 'JOBS.CREATIONTIME', 'JOBS.CREATIONHOST', 'JOBS.MODIFICATIONTIME',
@@ -78,8 +73,6 @@ sel = 'SELECT '
 sel += ','.join(columns)
 sel += ' FROM ATLAS_PANDA.JOBSARCHIVED4 JOBS LEFT JOIN ATLAS_DEFT.T_PRODUCTION_TASK TASKS'
 sel += ' ON JOBS.JEDITASKID = TASKS.TASKID'
-# sel += ' AND PANDAID=4225560422'
-# sel += ' AND ROWNUM < 3'
 sel += " WHERE JOBS.STATECHANGETIME >= TO_DATE( :start_date, 'YYYY-MM-DD HH24:MI:SS')"
 sel += " AND JOBS.STATECHANGETIME < TO_DATE( :end_date, 'YYYY-MM-DD HH24:MI:SS') "
 
@@ -97,6 +90,7 @@ for row in cursor:
         # print(colName, colValue)
         doc[colName] = colValue
 
+# change here
     if doc['creationtime']:
         doc['creationtime'] = str(doc['creationtime']).replace(' ', 'T')
     if doc['modificationtime']:
@@ -106,26 +100,9 @@ for row in cursor:
         doc['starttime'] = str(doc['starttime']).replace(' ', 'T')
     if doc['endtime']:
         doc['endtime'] = str(doc['endtime']).replace(' ', 'T')
-    doc['cpuconsumptiontime'] = int(doc['cpuconsumptiontime'])
-    if doc['statechangetime']:
-        doc['statechangetime'] = str(doc['statechangetime']).replace(' ', 'T')
+#########
 
-    (doc['dbTime'], doc['dbData'], doc['workDirSize'], doc['jobmetrics']
-     ) = conversions.splitJobmetrics(doc['jobmetrics'])
-    (doc['wall_time'], doc['cpu_eff'], doc['queue_time']) = conversions.deriveDurationAndCPUeff(
-        doc['creationtime'], doc['starttime'], doc['endtime'], doc['cpuconsumptiontime'])
-
-    dts = conversions.deriveTimes(doc['pilottiming'])
-    if len(dts) == 5:
-        (doc['timeGetJob'], doc['timeStageIn'], doc['timeExe'],
-         doc['timeStageOut'], doc['timeSetup']) = dts
-
-    if len(dts) == 6:
-        (doc['timeGetJob'], doc['timeStageIn'], doc['timeExe'], doc['timeStageOut'],
-         doc['time_initial_setup'], doc['time_payload_setup']) = dts
-
-    doc["_index"] = "jobs_archive_write"
-    doc["_id"] = doc['pandaid']
+    doc["_index"] = "queue"
 
     data.append(doc)
     # print(doc)

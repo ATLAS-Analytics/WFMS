@@ -30,92 +30,100 @@ print(con.version)
 cursor = con.cursor()
 
 columns = [
-    'JOBS.PANDAID', 'JOBS.JOBDEFINITIONID', 'JOBS.SCHEDULERID', 'JOBS.PILOTID', 'JOBS.CREATIONTIME', 'JOBS.CREATIONHOST', 'JOBS.MODIFICATIONTIME',
-    'JOBS.MODIFICATIONHOST', 'JOBS.ATLASRELEASE', 'JOBS.TRANSFORMATION', 'JOBS.HOMEPACKAGE', 'JOBS.PRODSERIESLABEL', 'JOBS.PRODSOURCELABEL',
-    'JOBS.PRODUSERID', 'JOBS.ASSIGNEDPRIORITY', 'JOBS.CURRENTPRIORITY', 'JOBS.ATTEMPTNR', 'JOBS.MAXATTEMPT', 'JOBS.JOBSTATUS', 'JOBS.JOBNAME',
-    'JOBS.MAXCPUCOUNT', 'JOBS.MAXDISKCOUNT', 'JOBS.MINRAMCOUNT',
-    'JOBS.STARTTIME', 'JOBS.ENDTIME', 'JOBS.CPUCONSUMPTIONTIME', 'JOBS.CPUCONSUMPTIONUNIT', 'JOBS.COMMANDTOPILOT', 'JOBS.TRANSEXITCODE',
-    'JOBS.PILOTERRORCODE', 'JOBS.PILOTERRORDIAG', 'JOBS.EXEERRORCODE', 'JOBS.EXEERRORDIAG', 'JOBS.SUPERRORCODE', 'JOBS.SUPERRORDIAG',
-    'JOBS.DDMERRORCODE', 'JOBS.DDMERRORDIAG', 'JOBS.BROKERAGEERRORCODE', 'JOBS.BROKERAGEERRORDIAG', 'JOBS.JOBDISPATCHERERRORCODE',
-    'JOBS.JOBDISPATCHERERRORDIAG', 'JOBS.TASKBUFFERERRORCODE', 'JOBS.TASKBUFFERERRORDIAG', 'JOBS.COMPUTINGSITE', 'JOBS.COMPUTINGELEMENT',
-    'JOBS.PRODDBLOCK', 'JOBS.DISPATCHDBLOCK', 'JOBS.DESTINATIONDBLOCK', 'JOBS.DESTINATIONSE', 'JOBS.NEVENTS', 'JOBS.GRID', 'JOBS.CLOUD', 'JOBS.CPUCONVERSION',
-    'JOBS.SOURCESITE', 'JOBS.DESTINATIONSITE', 'JOBS.TRANSFERTYPE', 'JOBS.TASKID', 'JOBS.CMTCONFIG', 'JOBS.STATECHANGETIME',
-    'JOBS.LOCKEDBY', 'JOBS.RELOCATIONFLAG', 'JOBS.JOBEXECUTIONID', 'JOBS.VO', 'JOBS.WORKINGGROUP', 'JOBS.PROCESSINGTYPE', 'JOBS.PRODUSERNAME',
-    'JOBS.COUNTRYGROUP', 'JOBS.BATCHID', 'JOBS.PARENTID', 'JOBS.SPECIALHANDLING', 'JOBS.JOBSETID', 'JOBS.CORECOUNT', 'JOBS.NINPUTDATAFILES',
-    'JOBS.INPUTFILETYPE', 'JOBS.INPUTFILEPROJECT', 'JOBS.INPUTFILEBYTES', 'JOBS.NOUTPUTDATAFILES', 'JOBS.OUTPUTFILEBYTES', 'JOBS.JOBMETRICS',
-    'JOBS.WORKQUEUE_ID', 'JOBS.JEDITASKID', 'JOBS.JOBSUBSTATUS', 'JOBS.ACTUALCORECOUNT', 'JOBS.REQID', 'JOBS.MAXRSS', 'JOBS.MAXVMEM', 'JOBS.MAXPSS',
-    'JOBS.AVGRSS', 'JOBS.AVGVMEM', 'JOBS.AVGSWAP', 'JOBS.AVGPSS', 'JOBS.MAXWALLTIME', 'JOBS.NUCLEUS', 'JOBS.EVENTSERVICE', 'JOBS.FAILEDATTEMPT', 'JOBS.HS06SEC', 'JOBS.HS06', 'JOBS.GSHARE',
-    'JOBS.TOTRCHAR', 'JOBS.TOTWCHAR', 'JOBS.TOTRBYTES', 'JOBS.TOTWBYTES', 'JOBS.RATERCHAR', 'JOBS.RATEWCHAR', 'JOBS.RATERBYTES', 'JOBS.RATEWBYTES',
-    'JOBS.PILOTTIMING', 'JOBS.MEMORY_LEAK', 'JOBS.RESOURCE_TYPE', 'JOBS.DISKIO', 'JOBS.CONTAINER_NAME', 'TASKS.SIMULATION_TYPE'
+        'DATETIME',
+        'PANDAID',
+        'QUEUE',
+        'GSHARE',
+        'PRODUSERNAME',
+        'TRANSFORMATION',
+        'JOB_RESOURCE_TYPE',
+        'STATUS',
+        'FINAL_STATUS',
+        'INPUTFILEBYTES',
+        'OUTPUTFILEBYTES',
+        'MODIFICATIONTIME',
+        'LEAD_TIMESTAMP',
+        'DURATION',
+        'CLOUD',
+        'SITE',
+        'TIER_LEVEL',
+        'STATUS',
+        'STATE',
+        'NODES',
+        'CORECOUNT',
+        'COREPOWER',
+        'REGION'
 ]
 
 escolumns = [
-    'pandaid', 'jobdefinitionid', 'schedulerid', 'pilotid', 'creationtime', 'creationhost', 'modificationtime',
-    'modificationhost', 'atlasrelease', 'transformation', 'homepackage', 'prodserieslabel', 'prodsourcelabel',
-    'produserid', 'assignedpriority', 'currentpriority', 'attemptnr', 'maxattempt', 'jobstatus', 'jobname',
-    'maxcpucount', 'maxdiskcount', 'minramcount',
-    'starttime', 'endtime', 'cpuconsumptiontime', 'cpuconsumptionunit', 'commandtopilot', 'transexitcode',
-    'piloterrorcode', 'piloterrordiag', 'exeerrorcode', 'exeerrordiag', 'superrorcode', 'superrordiag',
-    'ddmerrorcode', 'ddmerrordiag', 'brokerageerrorcode', 'brokerageerrordiag', 'jobdispatchererrorcode',
-    'jobdispatchererrordiag', 'taskbuffererrorcode', 'taskbuffererrordiag', 'computingsite', 'computingelement',
-    'proddblock', 'dispatchdblock', 'destinationdblock', 'destinationse', 'nevents', 'grid', 'cloud', 'cpuconversion',
-    'sourcesite', 'destinationsite', 'transfertype', 'taskid', 'cmtconfig', 'statechangetime',
-    'lockedby', 'relocationflag', 'jobexecutionid', 'vo', 'workinggroup', 'processingtype', 'produsername',
-    'countrygroup', 'batchid', 'parentid', 'specialhandling', 'jobsetid', 'corecount', 'ninputdatafiles',
-    'inputfiletype', 'inputfileproject', 'inputfilebytes', 'noutputdatafiles', 'outputfilebytes', 'jobmetrics',
-    'workqueue_id', 'jeditaskid', 'jobsubstatus', 'actualcorecount', 'reqid', 'maxrss', 'maxvmem', 'maxpss',
-    'avgrss', 'avgvmem', 'avgswap', 'avgpss', 'maxwalltime', 'nucleus', 'eventservice', 'failedattempt', 'hs06sec', 'hs06', 'gShare',
-    'IOcharRead', 'IOcharWritten', 'IObytesRead', 'IObytesWritten', 'IOcharReadRate', 'IOcharWriteRate', 'IObytesReadRate', 'IObytesWriteRate',
-    'pilottiming', 'memory_leak', 'resource_type', 'diskio', 'container_name', 'simulation_type'
+    'datetime',
+    'pandaid',
+    'queue',
+    'gshare',
+    'produsername',
+    'transformation',
+    'job_resource_type',
+    'status',
+    'final_status',
+    'inputfilebytes',
+    'outputfilebytes',
+    'modificationtime',
+    'lead_timestamp',
+    'duration',
+    'cloud',
+    'site',
+    'tier_level',
+    'status',
+    'state',
+    'nodes',
+    'corecount',
+    'corepower',
+    'region'
 ]
 
-sel = 'SELECT '
-sel += ','.join(columns)
-sel += ' FROM ATLAS_PANDA.JOBSARCHIVED4 JOBS LEFT JOIN ATLAS_DEFT.T_PRODUCTION_TASK TASKS'
-sel += ' ON JOBS.JEDITASKID = TASKS.TASKID'
-sel += " WHERE JOBS.STATECHANGETIME >= TO_DATE( :start_date, 'YYYY-MM-DD HH24:MI:SS')"
-sel += " AND JOBS.STATECHANGETIME < TO_DATE( :end_date, 'YYYY-MM-DD HH24:MI:SS') "
+with open(f'{os.path.dirname(__file__)}/queues_jobs_workload.sql') as fp:
+    lines = [line for line in fp.readlines() if not line.startswith('--')]
+    sel = ''.join(lines).format(from_date=start_date, to_date=end_date)
+    print(f'query = {sel}')
 
-# print(sel)
+    print(sel)
 
-cursor.execute(sel, start_date=start_date, end_date=end_date)
+    cursor.execute(sel, start_date=start_date, end_date=end_date)
 
-es = estools.get_es_connection()
+    es = estools.get_es_connection()
 
-data = []
-count = 0
-for row in cursor:
-    doc = {}
-    for colName, colValue in zip(escolumns, row):
-        # print(colName, colValue)
-        doc[colName] = colValue
+    data = []
+    count = 0
+    for row in cursor:
+        doc = {}
+        for colName, colValue in zip(escolumns, row):
+            # print(colName, colValue)
+            doc[colName] = colValue
 
-# change here
-    if doc['creationtime']:
-        doc['creationtime'] = str(doc['creationtime']).replace(' ', 'T')
-    if doc['modificationtime']:
-        doc['modificationtime'] = str(
-            doc['modificationtime']).replace(' ', 'T')
-    if doc['starttime']:
-        doc['starttime'] = str(doc['starttime']).replace(' ', 'T')
-    if doc['endtime']:
-        doc['endtime'] = str(doc['endtime']).replace(' ', 'T')
-#########
+    # change here
+        if doc['datetime']:
+            doc['datetime'] = str(doc['datetime']).replace(' ', 'T')
+        if doc['modificationtime']:
+            doc['modificationtime'] = str(
+                doc['modificationtime']).replace(' ', 'T')
+        if doc['lead_timestamp']:
+            doc['lead_timestamp'] = str(doc['lead_timestamp']).replace(' ', 'T')
+    #########
 
-    doc["_index"] = "queue"
+        doc["_index"] = "queue"
 
-    data.append(doc)
-    # print(doc)
+        data.append(doc)
+        # print(doc)
 
-    if not count % 500:
-        print(count)
-        res = estools.bulk_index(data, es)
-        if res:
-            del data[:]
-    count += 1
+        if not count % 500:
+            print(count)
+            res = estools.bulk_index(data, es)
+            if res:
+                del data[:]
+        count += 1
 
-estools.bulk_index(data, es)
-print('final count:', count)
+    estools.bulk_index(data, es)
+    print('final count:', count)
 
 
 con.close()

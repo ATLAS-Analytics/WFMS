@@ -6,12 +6,12 @@ with jobs_statuses as (
     FROM ATLAS_PANDA.JOBS_STATUSLOG s
     WHERE s.modificationtime >= (
             trunc(
-                to_date(:from_date, 'YYYY-MM-DD HH24:MI:SS'),
+                to_date(:start_date, 'YYYY-MM-DD HH24:MI:SS'),
                 'HH24'
-            ) - 1 / 24
+            )
         )
         AND s.modificationtime < trunc(
-            to_date(:from_date, 'YYYY-MM-DD HH24:MI:SS'),
+            to_date(:end_date, 'YYYY-MM-DD HH24:MI:SS'),
             'HH24'
         )
         AND s.prodsourcelabel = 'user'
@@ -27,9 +27,9 @@ prev as (
                 jobstatus as status,
                 (
                     trunc(
-                        to_date(:from_date, 'YYYY-MM-DD HH24:MI:SS'),
+                        to_date(:start_date, 'YYYY-MM-DD HH24:MI:SS'),
                         'HH24'
-                    ) - 1 / 24
+                    )
                 ) as modificationtime,
                 ROW_NUMBER() OVER (
                     PARTITION BY pandaid
@@ -42,9 +42,9 @@ prev as (
                 )
                 AND modificationtime < (
                     trunc(
-                        to_date(:from_date, 'YYYY-MM-DD HH24:MI:SS'),
+                        to_date(:end_date, 'YYYY-MM-DD HH24:MI:SS'),
                         'HH24'
-                    ) - 1 / 24
+                    )
                 )
         )
     WHERE rn in 1
@@ -60,7 +60,7 @@ merge as (
                 ORDER BY modificationtime ASC
             ),
             trunc(
-                to_date(:from_date, 'YYYY-MM-DD HH24:MI:SS'),
+                to_date(:start_date, 'YYYY-MM-DD HH24:MI:SS'),
                 'HH24'
             )
         ) as lead_timestamp
@@ -160,7 +160,7 @@ jobs as (
         resource_type
 )
 SELECT trunc(
-        to_date(:from_date, 'YYYY-MM-DD HH24:MI:SS'),
+        to_date(:start_date, 'YYYY-MM-DD HH24:MI:SS'),
         'HH24'
     ) as datetime,
     pandaid,
@@ -208,7 +208,7 @@ FROM (
             JOIN jobs j ON (j.pandaid = m.pandaid)
     )
 GROUP BY trunc(
-        to_date(:from_date, 'YYYY-MM-DD HH24:MI:SS'),
+        to_date(:start_date, 'YYYY-MM-DD HH24:MI:SS'),
         'HH24'
     ),
     pandaid,

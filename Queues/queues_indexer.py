@@ -30,29 +30,29 @@ print(con.version)
 cursor = con.cursor()
 
 columns = [
-        'DATETIME',
-        'PANDAID',
-        'QUEUE',
-        'GSHARE',
-        'PRODUSERNAME',
-        'TRANSFORMATION',
-        'JOB_RESOURCE_TYPE',
-        'STATUS',
-        'FINAL_STATUS',
-        'INPUTFILEBYTES',
-        'OUTPUTFILEBYTES',
-        'MODIFICATIONTIME',
-        'LEAD_TIMESTAMP',
-        'DURATION',
-        'CLOUD',
-        'SITE',
-        'TIER_LEVEL',
-        'STATUS',
-        'STATE',
-        'NODES',
-        'CORECOUNT',
-        'COREPOWER',
-        'REGION'
+    'DATETIME',
+    'PANDAID',
+    'QUEUE',
+    'GSHARE',
+    'PRODUSERNAME',
+    'TRANSFORMATION',
+    'JOB_RESOURCE_TYPE',
+    'STATUS',
+    'FINAL_STATUS',
+    'INPUTFILEBYTES',
+    'OUTPUTFILEBYTES',
+    'MODIFICATIONTIME',
+    'LEAD_TIMESTAMP',
+    'DURATION',
+    'CLOUD',
+    'SITE',
+    'TIER_LEVEL',
+    'STATUS',
+    'STATE',
+    'NODES',
+    'CORECOUNT',
+    'COREPOWER',
+    'REGION'
 ]
 
 escolumns = [
@@ -81,7 +81,7 @@ escolumns = [
     'region'
 ]
 
-with open(f'{os.path.dirname(__file__)}/queues_jobs_workload.sql') as fp:
+with open('/home/analyticssvc/Queues/queues_jobs_workload.sql') as fp:
     lines = [line for line in fp.readlines() if not line.startswith('--')]
     sel = ''.join(lines).format(from_date=start_date, to_date=end_date)
     print(f'query = {sel}')

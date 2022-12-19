@@ -82,10 +82,7 @@ escolumns = [
 ]
 
 with open('/home/analyticssvc/Queues/queues_jobs_workload.sql') as fp:
-    lines = [line for line in fp.readlines() if not line.startswith('--')]
-    sel = ''.join(lines).format(from_date=start_date, to_date=end_date)
-    print(f'query = {sel}')
-
+    sel = ''.join(fp.readlines())
     print(sel)
 
     cursor.execute(sel, start_date=start_date, end_date=end_date)
@@ -100,7 +97,6 @@ with open('/home/analyticssvc/Queues/queues_jobs_workload.sql') as fp:
             # print(colName, colValue)
             doc[colName] = colValue
 
-    # change here
         if doc['datetime']:
             doc['datetime'] = str(doc['datetime']).replace(' ', 'T')
         if doc['modificationtime']:
@@ -108,7 +104,6 @@ with open('/home/analyticssvc/Queues/queues_jobs_workload.sql') as fp:
                 doc['modificationtime']).replace(' ', 'T')
         if doc['lead_timestamp']:
             doc['lead_timestamp'] = str(doc['lead_timestamp']).replace(' ', 'T')
-    #########
 
         doc["_index"] = "queue"
 

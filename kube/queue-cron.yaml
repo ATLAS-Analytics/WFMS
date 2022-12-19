@@ -1,0 +1,48 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: queue-collector
+spec:
+  schedule: "0 */1 * * *"
+  suspend: false
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: wfms-jobs
+              image: atlasanalyticsservice/wfms:latest
+              command: ["Queues/run.sh"]
+              env:
+                - name: JOB_ORACLE_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: oracle-secret
+                      key: job_oracle_user
+                - name: JOB_ORACLE_PASS
+                  valueFrom:
+                    secretKeyRef:
+                      name: oracle-secret
+                      key: job_oracle_pass
+                - name: JOB_ORACLE_CONNECTION_STRING
+                  valueFrom:
+                    secretKeyRef:
+                      name: oracle-secret
+                      key: job_oracle_connection_string
+                - name: ES_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: es-auth-fts
+                      key: es_user
+                - name: ES_PASS
+                  valueFrom:
+                    secretKeyRef:
+                      name: es-auth-fts
+                      key: es_pass
+                - name: ES_HOST
+                  valueFrom:
+                    secretKeyRef:
+                      name: es-auth-fts
+                      key: es_host
+          restartPolicy: Never

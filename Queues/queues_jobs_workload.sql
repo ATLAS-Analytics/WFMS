@@ -42,7 +42,7 @@ prev as (
                 )
                 AND modificationtime < (
                     trunc(
-                        to_date(:end_date, 'YYYY-MM-DD HH24:MI:SS'),
+                        to_date(:start_date, 'YYYY-MM-DD HH24:MI:SS'),
                         'HH24'
                     )
                 )
@@ -60,7 +60,7 @@ merge as (
                 ORDER BY modificationtime ASC
             ),
             trunc(
-                to_date(:start_date, 'YYYY-MM-DD HH24:MI:SS'),
+                to_date(:end_date, 'YYYY-MM-DD HH24:MI:SS'),
                 'HH24'
             )
         ) as lead_timestamp
@@ -160,7 +160,7 @@ jobs as (
         resource_type
 )
 SELECT trunc(
-        to_date(:start_date, 'YYYY-MM-DD HH24:MI:SS'),
+        to_date(:end_date, 'YYYY-MM-DD HH24:MI:SS'),
         'HH24'
     ) as datetime,
     pandaid,
@@ -208,7 +208,7 @@ FROM (
             JOIN jobs j ON (j.pandaid = m.pandaid)
     )
 GROUP BY trunc(
-        to_date(:start_date, 'YYYY-MM-DD HH24:MI:SS'),
+        to_date(:end_date, 'YYYY-MM-DD HH24:MI:SS'),
         'HH24'
     ),
     pandaid,

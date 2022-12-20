@@ -95,6 +95,12 @@ jobs as (
                     SELECT distinct pandaid
                     FROM merge
                 )
+                and modificationtime >= (SELECT min(modificationtime) FROM merge)
+                and modificationtime < trunc(
+                                            to_date(:end_date, 'YYYY-MM-DD HH24:MI:SS'),
+                                            'HH24'
+                                        )
+                and prodsourcelabel = 'user'
             UNION ALL
             SELECT pandaid,
                 computingsite as queue,
@@ -109,6 +115,12 @@ jobs as (
                     SELECT distinct pandaid
                     FROM merge
                 )
+                and modificationtime >= (SELECT min(modificationtime) FROM merge)
+                and modificationtime < trunc(
+                                            to_date(:end_date, 'YYYY-MM-DD HH24:MI:SS'),
+                                            'HH24'
+                                        )
+                and prodsourcelabel = 'user'
             UNION ALL
             SELECT pandaid,
                 computingsite as queue,

@@ -22,6 +22,7 @@ def enhance_queues():
 
         enhanced_queues = []
         for queue, attrs in cric_queues.items():
+            print(queue, attrs)
             queues_dict = {
                 'queue': queue,
                 'site': attrs['rc_site'],

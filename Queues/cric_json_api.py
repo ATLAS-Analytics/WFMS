@@ -12,12 +12,11 @@ ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.join(ROOT_DIR, '..')
 
 
-def enhance_queues(all=False, with_rse=False):
+def enhance_queues():
 
     url_queue_all = 'https://atlas-cric.cern.ch/api/atlas/site/query/?json&pandaqueue_state=ANY'
-    url_queue = 'https://atlas-cric.cern.ch/api/atlas/pandaqueue/query/?json'
     try:
-        r = requests.get(url_queue_all if all else url_queue, verify=False)
+        r = requests.get(url_queue_all, verify=False)
         cric_queues = r.json()
         # print('whole json:', cric_queues)
 
@@ -29,8 +28,8 @@ def enhance_queues(all=False, with_rse=False):
                 'cloud': attrs['cloud'],
                 'tier_level': attrs['tier_level'],
                 'transferring_limit': attrs['transferringlimit'] or 2000,
-                'status': attrs['status'],
-                'state': attrs['state'],
+                'cric_status': attrs['status'],
+                'cric_state': attrs['state'],
                 'resource_type': attrs['resource_type'],
                 'nodes': attrs['nodes'],
                 'corepower': attrs['corepower'],
@@ -38,17 +37,11 @@ def enhance_queues(all=False, with_rse=False):
                 'region': attrs['region']
             }
 
-            if with_rse:
-                datadisks = [[d for d in v if 'DATADISK' in d or 'VP_DISK' in d]
-                             for k, v in attrs['astorages'].items()]
-                flat_datadisks = list(set([item for sublist in datadisks for item in sublist]))
-                queues_dict['rse'] = flat_datadisks or 'no rse'
-
             enhanced_queues.append(queues_dict)
 
         enhanced_queues = pd.DataFrame(enhanced_queues)
 
-        return enhanced_queues.explode('rse') if with_rse else enhanced_queues
+        return enhanced_queues
 
     except:
         print("Could not get sites from CRIC. Exiting...")

@@ -32,7 +32,6 @@ print(con.version)
 cursor = con.cursor()
 
 columns = [
-    'DATETIME',
     'PANDAID',
     'QUEUE',
     'GSHARE',
@@ -45,20 +44,10 @@ columns = [
     'OUTPUTFILEBYTES',
     'MODIFICATIONTIME',
     'LEAD_TIMESTAMP',
-    'DURATION',
-    'CLOUD',
-    'SITE',
-    'TIER_LEVEL',
-    'STATUS',
-    'STATE',
-    'NODES',
-    'CORECOUNT',
-    'COREPOWER',
-    'REGION'
+    'DURATION'
 ]
 
 escolumns = [
-    'datetime',
     'pandaid',
     'queue',
     'gshare',
@@ -71,16 +60,7 @@ escolumns = [
     'outputfilebytes',
     'modificationtime',
     'lead_timestamp',
-    'duration',
-    'cloud',
-    'site',
-    'tier_level',
-    'status',
-    'state',
-    'nodes',
-    'corecount',
-    'corepower',
-    'region'
+    'duration'
 ]
 
 with open('/home/analyticssvc/Queues/queues_jobs_workload.sql') as fp:
@@ -99,8 +79,6 @@ with open('/home/analyticssvc/Queues/queues_jobs_workload.sql') as fp:
             # print(colName, colValue)
             doc[colName] = colValue
 
-        if doc['datetime']:
-            doc['datetime'] = str(doc['datetime']).replace(' ', 'T')
         if doc['modificationtime']:
             doc['modificationtime'] = str(
                 doc['modificationtime']).replace(' ', 'T')

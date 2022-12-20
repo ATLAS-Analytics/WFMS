@@ -2,6 +2,8 @@ import os
 import sys
 import cx_Oracle
 import estools
+import pandas as pd
+from cric_json_api import enhance_queues
 
 if 'JOB_ORACLE_CONNECTION_STRING' not in os.environ:
     print('Connection to ORACLE DB not configured. Please set variable: JOB_ORACLE_CONNECTION_STRING ')
@@ -112,6 +114,10 @@ with open('/home/analyticssvc/Queues/queues_jobs_workload.sql') as fp:
 
         if not count % 500:
             print(count)
+            from_cric = enhance_queues()
+            data_df = pd.DataFrame(data)
+            result = pd.merge(data_df, from_cric, left_on='queue', right_on='queue')
+            data = data_df.to_dict(orient='records')
             res = estools.bulk_index(data, es)
             if res:
                 del data[:]

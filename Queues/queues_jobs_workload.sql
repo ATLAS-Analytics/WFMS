@@ -95,11 +95,14 @@ jobs as (
                     SELECT distinct pandaid
                     FROM merge
                 )
-                and modificationtime >= (SELECT min(modificationtime) FROM merge)
+                and modificationtime >= (
+                    SELECT min(modificationtime)
+                    FROM merge
+                )
                 and modificationtime < trunc(
-                                            to_date(:end_date, 'YYYY-MM-DD HH24:MI:SS'),
-                                            'HH24'
-                                        )
+                    to_date(:end_date, 'YYYY-MM-DD HH24:MI:SS'),
+                    'HH24'
+                )
                 and prodsourcelabel = 'user'
             UNION ALL
             SELECT pandaid,
@@ -115,11 +118,14 @@ jobs as (
                     SELECT distinct pandaid
                     FROM merge
                 )
-                and modificationtime >= (SELECT min(modificationtime) FROM merge)
+                and modificationtime >= (
+                    SELECT min(modificationtime)
+                    FROM merge
+                )
                 and modificationtime < trunc(
-                                            to_date(:end_date, 'YYYY-MM-DD HH24:MI:SS'),
-                                            'HH24'
-                                        )
+                    to_date(:end_date, 'YYYY-MM-DD HH24:MI:SS'),
+                    'HH24'
+                )
                 and prodsourcelabel = 'user'
             UNION ALL
             SELECT pandaid,
@@ -171,57 +177,56 @@ jobs as (
         transformation,
         resource_type
 )
-SELECT trunc(
-        pandaid,
-        queue,
-        gshare,
-        produsername,
-        transformation,
-        resource_type as job_resource_type,
-        common_status as status,
-        final_status,
-        MAX(inputfilebytes) as inputfilebytes,
-        MAX(outputfilebytes) as outputfilebytes,
-        min(modificationtime) as modificationtime,
-        max(lead_timestamp) as lead_timestamp,
-        round(
-            (max(lead_timestamp) - min(modificationtime)) * 60 * 60 * 24
-        ) as duration
-        FROM (
-                SELECT m.pandaid,
-                    m.queue,
-                    j.gshare,
-                    j.produsername,
-                    j.transformation,
-                    j.resource_type,
-                    j.inputfilebytes as inputfilebytes,
-                    j.outputfilebytes,
-                    CASE
-                        WHEN m.status in (
-                            'pending',
-                            'defined',
-                            'assigned',
-                            'activated',
-                            'throttled',
-                            'sent',
-                            'starting'
-                        ) THEN 'queued'
-                        WHEN m.status in ('running', 'holding', 'merging', 'transferring') THEN 'executing'
-                    END as common_status,
-                    CASE
-                        WHEN m.status in ('finished', 'failed', 'closed', 'cancelled') THEN m.status
-                    END as final_status,
-                    m.modificationtime,
-                    m.lead_timestamp
-                FROM merge m
-                    JOIN jobs j ON (j.pandaid = m.pandaid)
-            )
-        GROUP BY pandaid,
-            queue,
-            gshare,
-            produsername,
-            transformation,
-            resource_type,
-            common_status,
-            final_status
-        ORDER BY modificationtime
+SELECT pandaid,
+    queue,
+    gshare,
+    produsername,
+    transformation,
+    resource_type as job_resource_type,
+    common_status as status,
+    final_status,
+    MAX(inputfilebytes) as inputfilebytes,
+    MAX(outputfilebytes) as outputfilebytes,
+    min(modificationtime) as modificationtime,
+    max(lead_timestamp) as lead_timestamp,
+    round(
+        (max(lead_timestamp) - min(modificationtime)) * 60 * 60 * 24
+    ) as duration
+FROM (
+        SELECT m.pandaid,
+            m.queue,
+            j.gshare,
+            j.produsername,
+            j.transformation,
+            j.resource_type,
+            j.inputfilebytes as inputfilebytes,
+            j.outputfilebytes,
+            CASE
+                WHEN m.status in (
+                    'pending',
+                    'defined',
+                    'assigned',
+                    'activated',
+                    'throttled',
+                    'sent',
+                    'starting'
+                ) THEN 'queued'
+                WHEN m.status in ('running', 'holding', 'merging', 'transferring') THEN 'executing'
+            END as common_status,
+            CASE
+                WHEN m.status in ('finished', 'failed', 'closed', 'cancelled') THEN m.status
+            END as final_status,
+            m.modificationtime,
+            m.lead_timestamp
+        FROM merge m
+            JOIN jobs j ON (j.pandaid = m.pandaid)
+    )
+GROUP BY pandaid,
+    queue,
+    gshare,
+    produsername,
+    transformation,
+    resource_type,
+    common_status,
+    final_status
+ORDER BY modificationtime

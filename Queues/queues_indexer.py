@@ -22,6 +22,9 @@ end_date = sys.argv[2]
 
 print('Start date:', start_date, '\tEnd date:', end_date)
 
+
+from_cric = enhance_queues()
+
 user = os.environ['JOB_ORACLE_USER']
 passw = os.environ['JOB_ORACLE_PASS']
 conn = os.environ['JOB_ORACLE_CONNECTION_STRING'].replace('jdbc:oracle:thin:@//', '')
@@ -92,8 +95,8 @@ with open('/home/analyticssvc/Queues/queues_jobs_workload.sql') as fp:
 
         if not count % 500:
             print(count)
-            from_cric = enhance_queues()
             data_df = pd.DataFrame(data)
+            print(data_df.columns)
             result = pd.merge(data_df, from_cric, left_on='queue', right_on='queue')
             data = data_df.to_dict(orient='records')
             res = estools.bulk_index(data, es)

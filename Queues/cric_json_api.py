@@ -41,6 +41,8 @@ def enhance_queues():
 
         enhanced_queues = pd.DataFrame(enhanced_queues)
 
+        print(enhanced_queues.columns)
+
         return enhanced_queues
 
     except:

@@ -28,7 +28,7 @@ def enhance_queues():
                 'site': attrs['rc_site'],
                 'cloud': attrs['cloud'],
                 'tier_level': attrs['tier_level'],
-                'transferring_limit': attrs['transferringlimit'] or 2000,
+                # 'transferring_limit': attrs['transferringlimit'] or 2000,
                 'cric_status': attrs['status'],
                 'cric_state': attrs['state'],
                 'resource_type': attrs['resource_type'],

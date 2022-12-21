@@ -35,35 +35,45 @@ print(con.version)
 cursor = con.cursor()
 
 columns = [
+    'START_TIME',
+    'END_TIME',
     'PANDAID',
     'QUEUE',
     'GSHARE',
     'PRODUSERNAME',
     'TRANSFORMATION',
-    'JOB_RESOURCE_TYPE',
+    'RESOURCE_TYPE',
     'STATUS',
     'FINAL_STATUS',
     'INPUTFILEBYTES',
     'OUTPUTFILEBYTES',
-    'MODIFICATIONTIME',
-    'LEAD_TIMESTAMP',
-    'DURATION'
+    'DURATION',
+    'CPUCONSUMPTIONUNIT',
+    'PRODDBLOCK',
+    'PROCESSINGTYPE',
+    'INPUTFILETYPE',
+    'INPUTFILEPROJECT'
 ]
 
 escolumns = [
+    'start_time',
+    'end_time',
     'pandaid',
     'queue',
     'gshare',
     'produsername',
     'transformation',
-    'job_resource_type',
+    'resource_type',
     'status',
     'final_status',
     'inputfilebytes',
     'outputfilebytes',
-    'modificationtime',
-    'lead_timestamp',
-    'duration'
+    'duration',
+    'cpuconsumptionunit',
+    'proddblock',
+    'processingtype',
+    'inputfiletype',
+    'inputfileproject'
 ]
 
 with open('/home/analyticssvc/Queues/queues_jobs_workload.sql') as fp:
@@ -82,11 +92,11 @@ with open('/home/analyticssvc/Queues/queues_jobs_workload.sql') as fp:
             # print(colName, colValue)
             doc[colName] = colValue
 
-        if doc['modificationtime']:
-            doc['modificationtime'] = str(
-                doc['modificationtime']).replace(' ', 'T')
-        if doc['lead_timestamp']:
-            doc['lead_timestamp'] = str(doc['lead_timestamp']).replace(' ', 'T')
+        if doc['start_time']:
+            doc['start_time'] = str(
+                doc['start_time']).replace(' ', 'T')
+        if doc['end_time']:
+            doc['end_time'] = str(doc['end_time']).replace(' ', 'T')
 
         doc["_index"] = "queue"
 

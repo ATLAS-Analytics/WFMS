@@ -18,7 +18,6 @@ def enhance_queues():
     try:
         r = requests.get(url_queue_all, verify=False)
         cric_queues = r.json()
-        # print('whole json:', cric_queues)
 
         enhanced_queues = []
         for queue, attrs in cric_queues.items():
@@ -28,10 +27,9 @@ def enhance_queues():
                 'site': attrs['rc_site'],
                 'cloud': attrs['cloud'],
                 'tier_level': attrs['tier_level'],
-                # 'transferring_limit': attrs['transferringlimit'] or 2000,
                 'cric_status': attrs['status'],
                 'cric_state': attrs['state'],
-                'resource_type': attrs['resource_type'],
+                'cric_resource_type': attrs['resource_type'],
                 'nodes': attrs['nodes'],
                 'corepower': attrs['corepower'],
                 'corecount': attrs['corecount'],
@@ -41,8 +39,6 @@ def enhance_queues():
             enhanced_queues.append(queues_dict)
 
         enhanced_queues = pd.DataFrame(enhanced_queues)
-
-        print(enhanced_queues.columns)
 
         return enhanced_queues
 

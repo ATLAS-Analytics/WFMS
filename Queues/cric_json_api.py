@@ -19,21 +19,19 @@ def enhance_queues():
         r = requests.get(url_queue_all, verify=False)
         cric_queues = r.json()
 
+        placeholder = 'unknown'
         enhanced_queues = []
         for queue, attrs in cric_queues.items():
             print(queue, attrs)
             queues_dict = {
                 'queue': queue,
-                'site': attrs['rc_site'],
-                'cloud': attrs['cloud'],
-                'tier_level': attrs['tier_level'],
-                'cric_status': attrs['status'],
-                'cric_state': attrs['state'],
-                'cric_resource_type': attrs['resource_type'],
-                'nodes': attrs['nodes'],
-                'corepower': attrs['corepower'],
-                'corecount': attrs['corecount'],
-                'region': attrs['region']
+                'site': attrs['rc_site'] if 'rc_site' in attrs else placeholder,
+                'cloud': attrs['cloud'] if 'cloud' in attrs else placeholder,
+                'tier_level': attrs['tier_level'] if 'tier_level' in attrs else placeholder,
+                'cric_status': attrs['status'] if 'status' in attrs else placeholder,
+                'cric_state': attrs['state'] if 'state' in attrs else placeholder,
+                'cric_resource_type': attrs['resource_type'] if 'resource_type' in attrs else placeholder,
+                'region': attrs['region'] if 'region' in attrs else placeholder
             }
 
             enhanced_queues.append(queues_dict)

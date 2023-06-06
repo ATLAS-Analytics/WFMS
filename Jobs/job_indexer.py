@@ -52,7 +52,7 @@ columns = [
     'JOBS.WORKQUEUE_ID', 'JOBS.JEDITASKID', 'JOBS.JOBSUBSTATUS', 'JOBS.ACTUALCORECOUNT', 'JOBS.REQID', 'JOBS.MAXRSS', 'JOBS.MAXVMEM', 'JOBS.MAXPSS',
     'JOBS.AVGRSS', 'JOBS.AVGVMEM', 'JOBS.AVGSWAP', 'JOBS.AVGPSS', 'JOBS.MAXWALLTIME', 'JOBS.NUCLEUS', 'JOBS.EVENTSERVICE', 'JOBS.FAILEDATTEMPT', 'JOBS.HS06SEC', 'JOBS.HS06', 'JOBS.GSHARE',
     'JOBS.TOTRCHAR', 'JOBS.TOTWCHAR', 'JOBS.TOTRBYTES', 'JOBS.TOTWBYTES', 'JOBS.RATERCHAR', 'JOBS.RATEWCHAR', 'JOBS.RATERBYTES', 'JOBS.RATEWBYTES',
-    'JOBS.PILOTTIMING', 'JOBS.MEMORY_LEAK', 'JOBS.RESOURCE_TYPE', 'JOBS.DISKIO', 'JOBS.CONTAINER_NAME', 'TASKS.SIMULATION_TYPE'
+    'JOBS.PILOTTIMING', 'JOBS.MEMORY_LEAK', 'JOBS.RESOURCE_TYPE', 'JOBS.DISKIO', 'JOBS.CONTAINER_NAME', 'JOBS.CPU_ARCHITECTURE_LEVEL', 'TASKS.SIMULATION_TYPE'
 ]
 
 escolumns = [
@@ -72,7 +72,7 @@ escolumns = [
     'workqueue_id', 'jeditaskid', 'jobsubstatus', 'actualcorecount', 'reqid', 'maxrss', 'maxvmem', 'maxpss',
     'avgrss', 'avgvmem', 'avgswap', 'avgpss', 'maxwalltime', 'nucleus', 'eventservice', 'failedattempt', 'hs06sec', 'hs06', 'gShare',
     'IOcharRead', 'IOcharWritten', 'IObytesRead', 'IObytesWritten', 'IOcharReadRate', 'IOcharWriteRate', 'IObytesReadRate', 'IObytesWriteRate',
-    'pilottiming', 'memory_leak', 'resource_type', 'diskio', 'container_name', 'simulation_type'
+    'pilottiming', 'memory_leak', 'resource_type', 'diskio', 'container_name', 'cpu_architecture_level', 'simulation_type'
 ]
 
 sel = 'SELECT '

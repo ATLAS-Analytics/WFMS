@@ -1,11 +1,12 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: manual
+  name: manual-latest
 spec:
   containers:
     - name: wfms-manual
       image: atlasanalyticsservice/wfms:latest
+      imagePullPolicy: Always
       env:
         - name: JOB_ORACLE_USER
           valueFrom:
@@ -17,6 +18,16 @@ spec:
             secretKeyRef:
               name: oracle-secret
               key: job_oracle_pass
+        - name: BATCH_ORACLE_USER
+          valueFrom:
+            secretKeyRef:
+              name: oracle-secret
+              key: batch_oracle_user
+        - name: BATCH_ORACLE_PASS
+          valueFrom:
+            secretKeyRef:
+              name: oracle-secret
+              key: batch_oracle_pass
         - name: JOB_ORACLE_CONNECTION_STRING
           valueFrom:
             secretKeyRef:

@@ -53,7 +53,7 @@ for row in cursor:
     for colName, colValue in zip(escolumns, row):
         # print(colName, colValue)
         doc[colName] = colValue
-
+    doc['accounting_group'] = doc['accounting_group'].replace('group_u_ATLAS.u_zp.', '')
     if doc['submit_time']:
         doc['submit_time'] = str(doc['submit_time']).replace(' ', 'T')
     if doc['start_time']:
@@ -64,7 +64,7 @@ for row in cursor:
     doc["_index"] = "batch_archive_write"
 
     data.append(doc)
-    print(row)
+    # print(row)
 
     if not count % 500:
         print(count)

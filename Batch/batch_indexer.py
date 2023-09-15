@@ -28,13 +28,16 @@ con = cx_Oracle.connect(user + '/' + passw + '@' + conn)
 # con = cx_Oracle.connect(user + '/' + passw + '@adcr_prodsys')
 print(con.version)
 
+escolumns = ['_id', 'submit_time', 'start_time', 'end_time',
+             'cpu_usage', 'duration', 'time_to_start', 'accounting_group']
 
 cursor = con.cursor()
 
-sel = 'SELECT DISTINCT ACCOUNTINGGROUP '
+sel = 'SELECT GLOBALJOBID, JOBSUBMITDATE, JOBSTARTDATE, '
+sel += 'JOBENDDATE, CPUSUSAGE, DURATION, TIMETOSTART, ACCOUNTINGGROUP'
 sel += ' FROM ATLAS_LOCALGROUPDISK_MGT.LOCALJOBSCERNCONDOR'
-sel += " WHERE JOBS.STATECHANGETIME >= TO_DATE( :start_date, 'YYYY-MM-DD HH24:MI:SS')"
-sel += " AND JOBS.STATECHANGETIME < TO_DATE( :end_date, 'YYYY-MM-DD HH24:MI:SS') "
+sel += " WHERE JOBENDDATE >= TO_DATE( :start_date, 'YYYY-MM-DD HH24:MI:SS')"
+sel += " AND JOBENDDATE < TO_DATE( :end_date, 'YYYY-MM-DD HH24:MI:SS') "
 
 # print(sel)
 
@@ -47,34 +50,30 @@ count = 0
 for row in cursor:
     doc = {}
 
-    # for colName, colValue in zip(escolumns, row):
-    #     # print(colName, colValue)
-    #     doc[colName] = colValue
+    for colName, colValue in zip(escolumns, row):
+        # print(colName, colValue)
+        doc[colName] = colValue
 
-    # if doc['creationtime']:
-    #     doc['creationtime'] = str(doc['creationtime']).replace(' ', 'T')
-    # if doc['modificationtime']:
-    #     doc['modificationtime'] = str(
-    #         doc['modificationtime']).replace(' ', 'T')
-    # if doc['starttime']:
-    #     doc['starttime'] = str(doc['starttime']).replace(' ', 'T')
-    # if doc['endtime']:
-    #     doc['endtime'] = str(doc['endtime']).replace(' ', 'T')
+    if doc['submit_time']:
+        doc['submit_time'] = str(doc['submit_time']).replace(' ', 'T')
+    if doc['start_time']:
+        doc['start_time'] = str(doc['start_time']).replace(' ', 'T')
+    if doc['end_time']:
+        doc['end_time'] = str(doc['end_time']).replace(' ', 'T')
 
-    # doc["_index"] = "batch_archive_write"
-    # doc["_id"] = doc['pandaid']
+    doc["_index"] = "batch_archive_write"
 
     data.append(doc)
     print(row)
 
     if not count % 500:
         print(count)
-        # res = estools.bulk_index(data, es)
-        # if res:
-        # del data[:]
+        res = estools.bulk_index(data, es)
+        if res:
+            del data[:]
     count += 1
 
-# estools.bulk_index(data, es)
+estools.bulk_index(data, es)
 print('final count:', count)
 
 con.close()

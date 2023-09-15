@@ -1,0 +1,22 @@
+('GLOBALJOBID', <cx_Oracle.DbType DB_TYPE_VARCHAR>, 4000, 16000, None, None, 0)
+('NINDEX', <cx_Oracle.DbType DB_TYPE_NUMBER>, 39, None, 38, 0, 1)
+('JOBSUBMITDATE', <cx_Oracle.DbType DB_TYPE_DATE>, 23, None, None, None, 1)
+('JOBSTARTDATE', <cx_Oracle.DbType DB_TYPE_DATE>, 23, None, None, None, 1)
+('JOBENDDATE', <cx_Oracle.DbType DB_TYPE_DATE>, 23, None, None, None, 1)
+('CPUSUSAGE', <cx_Oracle.DbType DB_TYPE_NUMBER>, 43, None, 38, 3, 1)
+('DURATION', <cx_Oracle.DbType DB_TYPE_NUMBER>, 39, None, 38, 0, 1)
+('TIMETOSTART', <cx_Oracle.DbType DB_TYPE_NUMBER>, 39, None, 38, 0, 1)
+('CMD', <cx_Oracle.DbType DB_TYPE_VARCHAR>, 4000, 16000, None, None, 1)
+('ACCOUNTINGGROUP', <cx_Oracle.DbType DB_TYPE_VARCHAR>, 4000, 16000, None, None, 1)
+(
+    'bigbird16.cern.ch#7830194.0#1674777892', 
+    20230915, 
+    datetime.datetime(2023, 1, 27, 0, 4, 51), 
+    datetime.datetime(2023, 1, 27, 17, 36, 12), 
+    datetime.datetime(2023, 1, 27, 17, 37, 38), 
+    None, 
+    0, 
+    18, 
+    '/afs/cern.ch/user/r/rlindley/fit-config/job_FourTop_StandardFit_NewLumi_CROnly_ttttxsec_NoFolderStructure_Final_PLIV_v212196_chargesplit_NjetParameterized_SR_GNN_L02_deltaR_bj_min_/job_FourTop_StandardFit_NewLumi_CROnly_ttttxsec_NoFolderStructure_Final_PLIV_v212196_chargesplit_NjetParameterized_SR_GNN_L02_deltaR_bj_min_.sh', 
+    'group_u_ATLAS.u_zp.rlindley'
+)

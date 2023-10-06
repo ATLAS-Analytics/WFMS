@@ -29,12 +29,12 @@ con = cx_Oracle.connect(user + '/' + passw + '@' + conn)
 print(con.version)
 
 escolumns = ['_id', 'submit_time', 'start_time', 'end_time',
-             'cpu_usage', 'duration', 'time_to_start', 'accounting_group']
+             'cpu_usage', 'duration', 'time_to_start', 'accounting_group', 'usid']
 
 cursor = con.cursor()
 
 sel = 'SELECT GLOBALJOBID, JOBSUBMITDATE, JOBSTARTDATE, '
-sel += 'JOBENDDATE, CPUSUSAGE, DURATION, TIMETOSTART, ACCOUNTINGGROUP'
+sel += 'JOBENDDATE, CPUSUSAGE, DURATION, TIMETOSTART, ACCOUNTINGGROUP, USID'
 sel += ' FROM ATLAS_LOCALGROUPDISK_MGT.LOCALJOBSCERNCONDOR'
 sel += " WHERE JOBENDDATE >= TO_DATE( :start_date, 'YYYY-MM-DD HH24:MI:SS')"
 sel += " AND JOBENDDATE < TO_DATE( :end_date, 'YYYY-MM-DD HH24:MI:SS') "

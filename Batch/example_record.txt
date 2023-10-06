@@ -20,3 +20,18 @@
     '/afs/cern.ch/user/r/rlindley/fit-config/job_FourTop_StandardFit_NewLumi_CROnly_ttttxsec_NoFolderStructure_Final_PLIV_v212196_chargesplit_NjetParameterized_SR_GNN_L02_deltaR_bj_min_/job_FourTop_StandardFit_NewLumi_CROnly_ttttxsec_NoFolderStructure_Final_PLIV_v212196_chargesplit_NjetParameterized_SR_GNN_L02_deltaR_bj_min_.sh', 
     'group_u_ATLAS.u_zp.rlindley'
 )
+
+describe ATLAS_LOCALGROUPDISK_MGT.LOCALJOBSCERNCONDOR;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ GLOBALJOBID                               NOT NULL VARCHAR2(4000)
+ NINDEX                                             NUMBER(38)
+ JOBSUBMITDATE                                      DATE
+ JOBSTARTDATE                                       DATE
+ JOBENDDATE                                         DATE
+ CPUSUSAGE                                          NUMBER(38,3)
+ DURATION                                           NUMBER(38)
+ TIMETOSTART                                        NUMBER(38)
+ CMD                                                VARCHAR2(4000)
+ ACCOUNTINGGROUP                                    VARCHAR2(4000)
+ USID                                               VARCHAR2(100)

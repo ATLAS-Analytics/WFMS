@@ -2,7 +2,7 @@ import os
 import sys
 import cx_Oracle
 import estools
-# import conversions
+import sender
 
 if 'JOB_ORACLE_CONNECTION_STRING' not in os.environ:
     print('Connection to ORACLE DB not configured. Please set variable: JOB_ORACLE_CONNECTION_STRING ')
@@ -68,11 +68,13 @@ for row in cursor:
 
     if not count % 500:
         print(count)
+        sender.send(data)
         res = estools.bulk_index(data, es)
         if res:
             del data[:]
     count += 1
 
+sender.send(data)
 estools.bulk_index(data, es)
 print('final count:', count)
 

@@ -11,9 +11,9 @@ def send(data):
             'cluster': 'lxbatch',
             'state': 'finished',
             'users': doc['usid'],
-            'Id': doc['_id'],
+            'Id': doc['_id'].split("#")[1],
             'Runtime': doc['duration'],
-            'timestamp': doc['end_time']
+            'timestamp': f"{doc['end_time'][:23]}Z"
         }
         ndata.append(ndoc)
     resp = requests.post('https://af.atlas-ml.org/', json=ndata)
@@ -25,6 +25,6 @@ def send(data):
 # "cluster": "UC-AF",
 # "state": "finished",
 # "users": "emsmith",
-# "Id": "648384.154",
+# "Id": "648384.154", <= interpreted as a number :(
 # "@timestamp": "2023-10-10T23:08:32.243736065Z",
 # "Runtime": 790

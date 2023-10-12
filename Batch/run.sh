@@ -5,7 +5,7 @@ echo "  *******************************  importing batch table  ****************
 export LD_LIBRARY_PATH=/opt/oracle/instantclient_21_1:$LD_LIBRARY_PATH
 
 
-startDate=$(date -u '+%Y-%m-%d %H:00:00' -d "-25hour")
+startDate=$(date -u '+%Y-%m-%d %H:00:00' -d "-48hour")
 endDate=$(date -u '+%Y-%m-%d %H:00:00' -d "-1hour")
 echo "start date: ${startDate}"
 echo "end date: ${endDate}"

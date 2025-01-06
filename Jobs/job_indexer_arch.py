@@ -19,7 +19,7 @@ if not len(sys.argv) == 3:
 start_date = sys.argv[1]
 end_date = sys.argv[2]
 
-print('Start date:', start_date, '\t End date:', end_date)
+print('Start date:', start_date, '\tEnd date:', end_date)
 
 user = os.environ['JOB_ORACLE_USER']
 passw = os.environ['JOB_ORACLE_PASS']
@@ -52,7 +52,7 @@ columns = [
     'JOBS.WORKQUEUE_ID', 'JOBS.JEDITASKID', 'JOBS.JOBSUBSTATUS', 'JOBS.ACTUALCORECOUNT', 'JOBS.REQID', 'JOBS.MAXRSS', 'JOBS.MAXVMEM', 'JOBS.MAXPSS',
     'JOBS.AVGRSS', 'JOBS.AVGVMEM', 'JOBS.AVGSWAP', 'JOBS.AVGPSS', 'JOBS.MAXWALLTIME', 'JOBS.NUCLEUS', 'JOBS.EVENTSERVICE', 'JOBS.FAILEDATTEMPT', 'JOBS.HS06SEC', 'JOBS.HS06', 'JOBS.GSHARE',
     'JOBS.TOTRCHAR', 'JOBS.TOTWCHAR', 'JOBS.TOTRBYTES', 'JOBS.TOTWBYTES', 'JOBS.RATERCHAR', 'JOBS.RATEWCHAR', 'JOBS.RATERBYTES', 'JOBS.RATEWBYTES',
-    'JOBS.PILOTTIMING', 'JOBS.MEMORY_LEAK', 'JOBS.RESOURCE_TYPE', 'JOBS.DISKIO', 'JOBS.CONTAINER_NAME', 'TASKS.SIMULATION_TYPE'
+    'JOBS.PILOTTIMING', 'JOBS.MEMORY_LEAK', 'JOBS.RESOURCE_TYPE', 'JOBS.DISKIO', 'JOBS.CONTAINER_NAME', 'JOBS.CPU_ARCHITECTURE_LEVEL', 'TASKS.SIMULATION_TYPE'
 ]
 
 escolumns = [
@@ -72,7 +72,7 @@ escolumns = [
     'workqueue_id', 'jeditaskid', 'jobsubstatus', 'actualcorecount', 'reqid', 'maxrss', 'maxvmem', 'maxpss',
     'avgrss', 'avgvmem', 'avgswap', 'avgpss', 'maxwalltime', 'nucleus', 'eventservice', 'failedattempt', 'hs06sec', 'hs06', 'gShare',
     'IOcharRead', 'IOcharWritten', 'IObytesRead', 'IObytesWritten', 'IOcharReadRate', 'IOcharWriteRate', 'IObytesReadRate', 'IObytesWriteRate',
-    'pilottiming', 'memory_leak', 'resource_type', 'diskio', 'container_name', 'simulation_type'
+    'pilottiming', 'memory_leak', 'resource_type', 'diskio', 'container_name', 'cpu_architecture_level', 'simulation_type'
 ]
 
 sel = 'SELECT '
@@ -111,12 +111,16 @@ for row in cursor:
     if doc['statechangetime']:
         doc['statechangetime'] = str(doc['statechangetime']).replace(' ', 'T')
 
-    (doc['dbTime'], doc['dbData'], doc['workDirSize'], doc['jobmetrics']
-     ) = conversions.splitJobmetrics(doc['jobmetrics'])
-    (doc['wall_time'], doc['cpu_eff'], doc['queue_time']) = conversions.deriveDurationAndCPUeff(
-        doc['creationtime'], doc['starttime'], doc['endtime'], doc['cpuconsumptiontime'])
-    (doc['timeGetJob'], doc['timeStageIn'], doc['timeExe'], doc['timeStageOut'],
-     doc['timeSetup']) = conversions.deriveTimes(doc['pilottiming'])
+    (doc['dbTime'], doc['dbData'], doc['workDirSize'], doc['jobmetrics']) = conversions.splitJobmetrics(doc['jobmetrics'])
+    (doc['wall_time'], doc['cpu_eff'], doc['queue_time']) = conversions.deriveDurationAndCPUeff( doc['creationtime'], doc['starttime'], doc['endtime'], doc['cpuconsumptiontime'])
+    
+    dts = conversions.deriveTimes(doc['pilottiming'])
+    if len(dts) == 5:
+        (doc['timeGetJob'], doc['timeStageIn'], doc['timeExe'], doc['timeStageOut'], doc['timeSetup']) = dts
+    
+    if len(dts) == 6:
+        (doc['timeGetJob'], doc['timeStageIn'], doc['timeExe'], doc['timeStageOut'], doc['time_initial_setup'], doc['time_payload_setup'] ) = dts
+    
     doc["_index"] = "jobs_archive_write"
     doc["_id"] = doc['pandaid']
 

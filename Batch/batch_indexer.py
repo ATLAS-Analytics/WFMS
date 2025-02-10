@@ -1,7 +1,6 @@
 import os
 import sys
 import cx_Oracle
-import estools
 import sender
 
 if 'JOB_ORACLE_CONNECTION_STRING' not in os.environ:
@@ -28,54 +27,49 @@ con = cx_Oracle.connect(user + '/' + passw + '@' + conn)
 # con = cx_Oracle.connect(user + '/' + passw + '@adcr_prodsys')
 print(con.version)
 
-escolumns = ['_id', 'submit_time', 'start_time', 'end_time', 'cpu_time',
-             'cpu_usage', 'disk_usage', 'memory_usage', 'duration', 'time_to_start', 'accounting_group', 'usid']
-
 cursor = con.cursor()
 
-sel = 'SELECT GLOBALJOBID, JOBSUBMITDATE, JOBSTARTDATE, '
-sel += 'JOBENDDATE, CPUTIME, CPUSUSAGE, DISKUSAGE, MEMORYUSAGE, DURATION, TIMETOSTART, ACCOUNTINGGROUP, USID'
-sel += ' FROM ATLAS_LOCALGROUPDISK_MGT.LOCALJOBSCERNCONDOR'
-sel += " WHERE JOBENDDATE >= TO_DATE( :start_date, 'YYYY-MM-DD HH24:MI:SS')"
-sel += " AND JOBENDDATE < TO_DATE( :end_date, 'YYYY-MM-DD HH24:MI:SS') "
+sel = 'SELECT MONTH, YEAR, NMEMBERS, CPUTIME, WALLTIME, NJOBS, NCORES, INSERTED_DATE FROM ATLAS_LOCALGROUPDISK_MGT.USATLASLXBATCH'
+sel += " WHERE INSERTED_DATE >= TO_DATE( :start_date, 'YYYY-MM-DD HH24:MI:SS')"
+sel += " AND INSERTED_DATE < TO_DATE( :end_date, 'YYYY-MM-DD HH24:MI:SS') "
 
 # print(sel)
 
 cursor.execute(sel, start_date=start_date, end_date=end_date)
 
-es = estools.get_es_connection()
+data = []
+count = 0
+for row in cursor:
+    doc={
+        'end_time': str(row[1])+"-"+str(row[0])+"-05T00:00:00",
+        'usid': [f"u_{i}" for i in range(row[2])]
+    }
+    # doc['inserted_time'] = str(row[2]).replace(' ', 'T')
+    data.append(doc)
+    print(row)
+
+sender.send_condorjob(data)
+print('condorjob docs:', len(data))
+
+
+sel = 'SELECT RECORDDATE, NMEMBERS, INSERTED_DATE FROM ATLAS_LOCALGROUPDISK_MGT.USATLASLXPLUS'
+sel += " WHERE RECORDDATE >= TO_DATE( :start_date, 'YYYY-MM-DD HH24:MI:SS')"
+sel += " AND RECORDDATE < TO_DATE( :end_date, 'YYYY-MM-DD HH24:MI:SS') "
+
+# print(sel)
+
+cursor.execute(sel, start_date=start_date, end_date=end_date)
 
 data = []
 count = 0
 for row in cursor:
-    doc = {}
-
-    for colName, colValue in zip(escolumns, row):
-        # print(colName, colValue)
-        doc[colName] = colValue
-    doc['accounting_group'] = doc['accounting_group'].replace('group_u_ATLAS.u_zp.', '')
-    if doc['submit_time']:
-        doc['submit_time'] = str(doc['submit_time']).replace(' ', 'T')
-    if doc['start_time']:
-        doc['start_time'] = str(doc['start_time']).replace(' ', 'T')
-    if doc['end_time']:
-        doc['end_time'] = str(doc['end_time']).replace(' ', 'T')
-
-    doc["_index"] = "batch_archive_write"
-
+    doc={
+        'end_time': str(row[0]).replace(' ', 'T'),
+        'nusers': row[1],
+        'users': [f"u_{i}" for i in range(row[1])]
+    }
     data.append(doc)
-    # print(row)
+    print(row)
 
-    if not count % 500:
-        print(count)
-        sender.send(data)
-        res = estools.bulk_index(data, es)
-        if res:
-            del data[:]
-    count += 1
-
-sender.send(data)
-estools.bulk_index(data, es)
-print('final count:', count)
-
-con.close()
+sender.send_ssh(data)
+print('ssh docs:', len(data))
